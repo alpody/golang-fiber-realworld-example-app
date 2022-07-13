@@ -13,7 +13,8 @@ import (
 	"github.com/alpody/fiber-realworld/store"
 	"github.com/alpody/fiber-realworld/user"
 	"github.com/gofiber/fiber/v2"
-	_ "gorm.io/driver/postgres"
+
+	// _ "gorm.io/driver/postgres"
 	_ "gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

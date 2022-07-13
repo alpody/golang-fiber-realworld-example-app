@@ -10,7 +10,7 @@ import (
 	"github.com/alpody/fiber-realworld/handler"
 	"github.com/alpody/fiber-realworld/router"
 	"github.com/alpody/fiber-realworld/store"
-	swagger "github.com/arsmn/fiber-swagger/v2"
+	"github.com/gofiber/swagger"
 )
 
 // @description Conduit API
@@ -28,7 +28,7 @@ import (
 
 func main() {
 	r := router.New()
-	r.Get("/swagger/*", swagger.Handler)
+	r.Get("/swagger/*", swagger.HandlerDefault)
 	d := db.New()
 	db.AutoMigrate(d)
 
