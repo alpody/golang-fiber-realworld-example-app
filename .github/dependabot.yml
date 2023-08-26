@@ -11,7 +11,6 @@ updates:
       interval: "daily"
     labels:
     - "dependency golang"
-    open-pull-requests-limit: 10
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
@@ -19,11 +18,9 @@ updates:
       # Disable all pull requests for Docker dependencies
     labels: 
     -  "dependency docker"
-    open-pull-requests-limit: 10
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule: 
       interval: daily
     labels: 
     -  "dependency gh-action"
-    open-pull-requests-limit: 10
