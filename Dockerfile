@@ -1,4 +1,4 @@
-FROM golang:1.21.1-alpine3.18 AS builder
+FROM golang:1.21.2-alpine3.18 AS builder
 
 RUN apk add --update gcc musl-dev
 RUN mkdir -p /myapp
