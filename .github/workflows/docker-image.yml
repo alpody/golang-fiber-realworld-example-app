@@ -6,6 +6,21 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker image tag'
+        required: false
+        default: 'latest'
+      environment:
+        description: 'Environment to deploy to'
+        required: false
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+          - development
 
 jobs:
   docker:
@@ -29,4 +44,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/golang-fiber-real-world:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/golang-fiber-real-world:${{ github.event.inputs.tag || 'latest' }}
