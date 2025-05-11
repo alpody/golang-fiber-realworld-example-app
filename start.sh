@@ -1,17 +1,14 @@
 #!/bin/sh
 set -e
 
-# Print section header
 section() {
   echo "===> $1"
 }
 
-# Create necessary directories
 section "Setting up directories"
 mkdir -p ./database ./config
-chmod o+w ./database 
+chmod o+w ./database
 
-# Check if .env exists, if not copy from example
 section "Setting up environment"
 if [ ! -f .env ]; then
   if [ -f .env.example ]; then
@@ -19,7 +16,6 @@ if [ ! -f .env ]; then
     echo "Created .env file from example"
   else
     echo "Warning: No .env or .env.example file found"
-    # Create a minimal env file
     cat > .env << EOF
 DB_HOST=postgres
 DB_PORT=5432
@@ -32,16 +28,13 @@ EOF
   fi
 fi
 
-# Build the application first
 section "Building Docker images"
 docker-compose build --no-cache
 
-# Start Postgres container separately
 section "Starting PostgreSQL"
 docker-compose up -d postgres
 echo "Waiting for PostgreSQL to be ready..."
 
-# Better wait for PostgreSQL to be ready using pg_isready
 for i in {1..30}; do
   if docker-compose exec postgres pg_isready -h localhost -U postgres > /dev/null 2>&1; then
     echo "PostgreSQL is ready!"
@@ -56,11 +49,9 @@ for i in {1..30}; do
   fi
 done
 
-# Start the application
 section "Starting application"
 docker-compose up --abort-on-container-exit fiber-realworld newman-checker
 
-# Clean up after exit
 section "Cleaning up"
 docker-compose down
 echo "Done!"

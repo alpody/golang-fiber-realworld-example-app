@@ -2,6 +2,7 @@ package db
 
 import (
 	"os"
+
 	"github.com/spf13/viper"
 )
 
@@ -14,7 +15,6 @@ type DatabaseConfig struct {
 	SSLMode  string `mapstructure:"sslmode"`
 }
 
-// Helper function to get environment variable with fallback
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
@@ -31,7 +31,7 @@ func LoadConfig() (*DatabaseConfig, error) {
 		Name:     getEnv("DB_NAME", "realworld"),
 		SSLMode:  getEnv("DB_SSLMODE", "disable"),
 	}
-	
+
 	// Also try viper for backward compatibility
 	viper.SetConfigName("config")
 	viper.SetConfigType("env")
@@ -47,12 +47,10 @@ func LoadConfig() (*DatabaseConfig, error) {
 
 	viper.AutomaticEnv()
 
-	// Try to read from file, but don't error if not found
 	_ = viper.ReadInConfig()
 
 	var viperConfig DatabaseConfig
 	if err := viper.Unmarshal(&viperConfig); err == nil {
-		// Only override if values are non-empty
 		if viperConfig.Host != "" {
 			config.Host = viperConfig.Host
 		}
