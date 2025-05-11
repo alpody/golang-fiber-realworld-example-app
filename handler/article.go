@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/alpody/fiber-realworld/model"
-	"github.com/alpody/fiber-realworld/utils"
+	"github.com/polinanime/sna25/model"
+	"github.com/polinanime/sna25/utils"
 
 	"github.com/gofiber/fiber/v2"
 )

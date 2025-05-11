@@ -1,28 +1,45 @@
-FROM golang:1.22.3-alpine3.18 AS builder
+FROM golang:1.22-alpine3.18 AS builder
 
-RUN apk add --update gcc musl-dev
+# Install necessary build dependencies
+RUN apk add --update gcc musl-dev postgresql-dev git
+
+# Set up working directory
 RUN mkdir -p /myapp
 ADD . /myapp
 WORKDIR /myapp
 
+# Create user
 RUN adduser -u 10001 -D myapp
 
-RUN  go install github.com/swaggo/swag/cmd/swag@latest  &&  go generate . && GOOS=linux GOARCH=amd64 CGO_ENABLED=1  go build -ldflags='-extldflags=-static'  -o myapp .
+# Install swag, generate docs, and build the app with better error visibility
+RUN go install github.com/swaggo/swag/cmd/swag@latest && \
+    swag init && \
+    CGO_ENABLED=1 go build -v -o myapp .
 
-#RUN make build-static 
+# Set permissions
 RUN chown myapp: ./database
 
 
-FROM scratch 
+FROM alpine:3.18
 
+# Install necessary runtime dependencies
+RUN apk --no-cache add ca-certificates postgresql-client
+
+# Setup user
 COPY --from=builder /etc/passwd /etc/passwd
 USER myapp
 
 WORKDIR /myapp
 
-#COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs/
+# Copy files from builder
+COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs/
 COPY --from=builder /myapp/myapp ./myapp
 COPY --from=builder /myapp/database ./database
-VOLUME ./database
-CMD ["./myapp"]
+COPY --from=builder /myapp/config ./config
+COPY --from=builder /myapp/.env.example ./.env.example
 
+# Configure volumes
+VOLUME ["/myapp/database", "/myapp/config"]
+
+# Run the application
+CMD ["./myapp"]

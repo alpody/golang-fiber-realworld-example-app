@@ -1,15 +1,17 @@
+// You must first install   https://github.com/arsmn/fiber-swagger
+//
 //go:generate swag init
-//You must first install   https://github.com/arsmn/fiber-swagger
 package main
 
 import (
 	"fmt"
+	"log"
 
-	"github.com/alpody/fiber-realworld/db"
-	_ "github.com/alpody/fiber-realworld/docs"
-	"github.com/alpody/fiber-realworld/handler"
-	"github.com/alpody/fiber-realworld/router"
-	"github.com/alpody/fiber-realworld/store"
+	"github.com/polinanime/sna25/db"
+	_ "github.com/polinanime/sna25/docs"
+	"github.com/polinanime/sna25/handler"
+	"github.com/polinanime/sna25/router"
+	"github.com/polinanime/sna25/store"
 	"github.com/gofiber/swagger"
 )
 
@@ -29,7 +31,12 @@ import (
 func main() {
 	r := router.New()
 	r.Get("/swagger/*", swagger.HandlerDefault)
-	d := db.New()
+
+	config, err := db.LoadConfig()
+	if err != nil {
+		log.Fatalf("Error when loading database config: %e", err)
+	}
+	d := db.NewPostgres(config)
 	db.AutoMigrate(d)
 
 	us := store.NewUserStore(d)
@@ -37,7 +44,7 @@ func main() {
 
 	h := handler.NewHandler(us, as)
 	h.Register(r)
-	err := r.Listen(":8585")
+	err = r.Listen(":8585")
 	if err != nil {
 		fmt.Printf("%v", err)
 	}

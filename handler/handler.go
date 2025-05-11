@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/alpody/fiber-realworld/article"
-	"github.com/alpody/fiber-realworld/user"
+	"github.com/polinanime/sna25/article"
+	"github.com/polinanime/sna25/user"
 )
 
 type Handler struct {

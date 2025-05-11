@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/alpody/fiber-realworld/model"
+	"github.com/polinanime/sna25/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gosimple/slug"
 )

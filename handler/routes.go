@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/alpody/fiber-realworld/utils"
+	"github.com/polinanime/sna25/utils"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 )

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/alpody/fiber-realworld/model"
-	"github.com/alpody/fiber-realworld/utils"
+	"github.com/polinanime/sna25/model"
+	"github.com/polinanime/sna25/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )

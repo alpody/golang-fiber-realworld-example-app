@@ -3,7 +3,7 @@ package handler
 import (
 	//"fmt"
 
-	"github.com/alpody/fiber-realworld/utils"
+	"github.com/polinanime/sna25/utils"
 	//"github.com/gofiber/fiber/v2"
 	"encoding/json"
 	"io/ioutil"

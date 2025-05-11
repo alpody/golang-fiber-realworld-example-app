@@ -3,7 +3,7 @@ package store
 import (
 	"errors"
 
-	"github.com/alpody/fiber-realworld/model"
+	"github.com/polinanime/sna25/model"
 	"gorm.io/gorm"
 )
 

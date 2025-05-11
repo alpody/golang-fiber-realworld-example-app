@@ -6,12 +6,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/alpody/fiber-realworld/article"
-	"github.com/alpody/fiber-realworld/db"
-	"github.com/alpody/fiber-realworld/model"
-	"github.com/alpody/fiber-realworld/router"
-	"github.com/alpody/fiber-realworld/store"
-	"github.com/alpody/fiber-realworld/user"
+	"github.com/polinanime/sna25/article"
+	"github.com/polinanime/sna25/db"
+	"github.com/polinanime/sna25/model"
+	"github.com/polinanime/sna25/router"
+	"github.com/polinanime/sna25/store"
+	"github.com/polinanime/sna25/user"
 	"github.com/gofiber/fiber/v2"
 
 	// _ "gorm.io/driver/postgres"

@@ -3,9 +3,9 @@ package handler
 import (
 	"time"
 
-	"github.com/alpody/fiber-realworld/model"
-	"github.com/alpody/fiber-realworld/user"
-	"github.com/alpody/fiber-realworld/utils"
+	"github.com/polinanime/sna25/model"
+	"github.com/polinanime/sna25/user"
+	"github.com/polinanime/sna25/utils"
 	_ "github.com/gofiber/fiber/v2"
 )
 

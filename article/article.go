@@ -1,7 +1,7 @@
 package article
 
 import (
-	"github.com/alpody/fiber-realworld/model"
+	"github.com/polinanime/sna25/model"
 )
 
 type Store interface {
