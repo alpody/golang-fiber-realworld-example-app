@@ -1,0 +1,8 @@
+dist: xenial
+language: go
+
+go:
+  - 1.17.x
+before_install:
+  - go install github.com/swaggo/swag/cmd/swag@latest
+script: go mod download && make generate && make build
