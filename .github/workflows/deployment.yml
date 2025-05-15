@@ -58,8 +58,10 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          sed -i "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml
           scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
+          # Create .env file with Docker Hub username
+          echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" > .env
+          scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         env:
@@ -72,6 +74,7 @@ jobs:
             ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest && \
             if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then \
+              export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} && \
               docker-compose up -d backend; \
             else \
               echo 'ERROR: No docker-compose file found!' && \
@@ -108,8 +111,10 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          sed -i "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml
           scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
+          # Create .env file with Docker Hub username
+          echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" > .env
+          scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         env:
@@ -122,6 +127,7 @@ jobs:
             ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest && \
             if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then \
+              export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} && \
               docker-compose up -d frontend; \
             else \
               echo 'ERROR: No docker-compose file found!' && \
