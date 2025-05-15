@@ -1,23 +1,37 @@
 import { paths } from "@/generated/apiSchema.generated";
-import { FilterRequired, GetValueRecursive, OptionalUndefined } from "@/utils/types/utilityTypes";
+import {
+  FilterRequired,
+  GetValueRecursive,
+  OptionalUndefined,
+} from "@/utils/types/utilityTypes";
 
 export type ApiPath = keyof paths;
 
 type HttpMethod = "get" | "post" | "put" | "delete" | "patch";
 
-export type HttpMethodOfPath<P extends ApiPath> = HttpMethod & keyof FilterRequired<paths[P]>;
+export type HttpMethodOfPath<P extends ApiPath> = HttpMethod &
+  keyof FilterRequired<paths[P]>;
 
-export type RequestParams<P extends ApiPath, M extends HttpMethodOfPath<P>> = OptionalUndefined<{
+export type RequestParams<
+  P extends ApiPath,
+  M extends HttpMethodOfPath<P>,
+> = OptionalUndefined<{
   query: GetValueRecursive<paths, [P, M, "parameters", "query"]>;
   path: GetValueRecursive<paths, [P, M, "parameters", "path"]>;
-  body: GetValueRecursive<paths, [P, M, "requestBody", "content", "application/json"]>;
+  body: GetValueRecursive<
+    paths,
+    [P, M, "requestBody", "content", "application/json"]
+  >;
 }>;
 
 export const HttpSuccessCode = [200, 201, 204] as const;
 
 export type HttpSuccessCode = (typeof HttpSuccessCode)[number];
 
-export type ApiSuccessResponse<P extends ApiPath, M extends HttpMethodOfPath<P>> = GetValueRecursive<
+export type ApiSuccessResponse<
+  P extends ApiPath,
+  M extends HttpMethodOfPath<P>,
+> = GetValueRecursive<
   paths,
   [P, M, "responses", HttpSuccessCode, "content", "application/json"]
 >;
@@ -34,7 +48,10 @@ type ApiErrorResponseOfStatusCode<
   ? {
       result: "error";
       statusCode: C;
-      error: GetValueRecursive<paths, [P, M, "responses", C, "content", "application/json"]>;
+      error: GetValueRecursive<
+        paths,
+        [P, M, "responses", C, "content", "application/json"]
+      >;
     }
   : never;
 

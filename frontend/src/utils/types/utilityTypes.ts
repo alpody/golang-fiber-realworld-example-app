@@ -26,10 +26,10 @@ export type OptionalUndefined<T> = Omit<
 //   never
 // >;
 
-export type GetValueRecursive<T extends object, K extends PropertyKey[]> = K extends [
-  infer First,
-  ...infer Rest extends PropertyKey[],
-]
+export type GetValueRecursive<
+  T extends object,
+  K extends PropertyKey[],
+> = K extends [infer First, ...infer Rest extends PropertyKey[]]
   ? First extends keyof T
     ? T[First] extends object
       ? GetValueRecursive<T[First], Rest>

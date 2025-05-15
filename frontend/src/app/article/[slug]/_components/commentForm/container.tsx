@@ -12,7 +12,10 @@ type Props = {
 
 export const CommentForm = ({ slug, currentUserPromise }: Props) => {
   const currentUser = currentUserPromise && use(currentUserPromise);
-  const [state, action, isPending] = useActionState(postCommentAction, undefined);
+  const [state, action, isPending] = useActionState(
+    postCommentAction,
+    undefined,
+  );
 
   return (
     <CommentFormPresentation

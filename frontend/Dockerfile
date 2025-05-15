@@ -1,31 +1,42 @@
-FROM node:20-alpine AS build
+FROM node:24.0.2-alpine3.21 AS base
 
-WORKDIR /app
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app/
 
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml* .npmrc* ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
-RUN npm ci
 
-COPY . .
+FROM base AS builder
+WORKDIR /app/
+COPY --from=deps /app/node_modules/ ./node_modules/
+COPY ./ ./
 
-RUN npm run build
+ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN ls -la && ls -la .next
+RUN corepack enable pnpm && pnpm run build
 
-FROM node:20-alpine
-
-WORKDIR /app
-
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/package-lock.json ./package-lock.json
-COPY --from=build /app/public ./public
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/node_modules ./node_modules
-
-EXPOSE 3000
+FROM base AS runner
+WORKDIR /app/
 
 ENV NODE_ENV=production
-ENV PORT=3000
-ENV API_BASE_URL=http://localhost:8585/api
+ENV NEXT_TELEMETRY_DISABLED=1
 
-CMD ["npm", "run", "start"]
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public/ ./
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/ ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static/ ./.next/
+COPY ./.env* ./
+
+USER nextjs
+
+EXPOSE 5173
+
+ENV PORT=5173
+
+ENV HOSTNAME="0.0.0.0"
+CMD ["node", "server.js"]

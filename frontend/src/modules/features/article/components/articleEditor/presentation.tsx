@@ -15,7 +15,12 @@ type Props = {
   result?: SubmissionResult<string[]>;
 };
 
-export const ArticleEditor = ({ defaultValues, result, action, isPending }: Props) => {
+export const ArticleEditor = ({
+  defaultValues,
+  result,
+  action,
+  isPending,
+}: Props) => {
   const [form, fields] = useForm({
     lastResult: result,
     onValidate({ formData }) {
@@ -59,8 +64,18 @@ export const ArticleEditor = ({ defaultValues, result, action, isPending }: Prop
   return (
     <>
       <ErrorMessage messages={form.errors} />
-      <form id={form.id} action={action} onSubmit={form.onSubmit} noValidate={true}>
-        <input type="hidden" key={fields.slug.key} name={fields.slug.name} defaultValue={fields.slug.initialValue} />
+      <form
+        id={form.id}
+        action={action}
+        onSubmit={form.onSubmit}
+        noValidate={true}
+      >
+        <input
+          type="hidden"
+          key={fields.slug.key}
+          name={fields.slug.name}
+          defaultValue={fields.slug.initialValue}
+        />
         <fieldset>
           <fieldset className="form-group">
             <input
@@ -108,8 +123,16 @@ export const ArticleEditor = ({ defaultValues, result, action, isPending }: Prop
             <ul className="tag-list">
               {fields.tagList.getFieldList().map((tagField, index) => (
                 <li key={tagField.key}>
-                  <Tag component="span" variant="filled" className={styles["tag-form"]}>
-                    <input type="hidden" name={tagField.name} value={tagField.value} />
+                  <Tag
+                    component="span"
+                    variant="filled"
+                    className={styles["tag-form"]}
+                  >
+                    <input
+                      type="hidden"
+                      name={tagField.name}
+                      value={tagField.value}
+                    />
                     <button onClick={() => onClickRemoveTag(index)}>
                       <i className="ion-close-round" />
                     </button>

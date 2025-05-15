@@ -11,10 +11,18 @@ type Props = {
   className?: string;
 };
 
-export const FavoriteButton = ({ favorited, favoritesCount, action, disabled, showMessage, className }: Props) => {
+export const FavoriteButton = ({
+  favorited,
+  favoritesCount,
+  action,
+  disabled,
+  showMessage,
+  className,
+}: Props) => {
   const content = showMessage ? (
     <>
-      <i className="ion-heart"></i> {favorited ? "Unfavorite Article " : "Favorite Article "}
+      <i className="ion-heart"></i>{" "}
+      {favorited ? "Unfavorite Article " : "Favorite Article "}
       <span className="counter">({favoritesCount})</span>
     </>
   ) : (
@@ -25,7 +33,11 @@ export const FavoriteButton = ({ favorited, favoritesCount, action, disabled, sh
 
   return (
     <form action={action} className={clsx(styles["form"], className)}>
-      <Button component="button" variant={favorited ? "filled" : "outline"} disabled={disabled}>
+      <Button
+        component="button"
+        variant={favorited ? "filled" : "outline"}
+        disabled={disabled}
+      >
         {content}
       </Button>
     </form>

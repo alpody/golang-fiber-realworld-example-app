@@ -7,7 +7,10 @@ import { createSession } from "@/utils/auth/session";
 import { parseWithZod } from "@conform-to/zod";
 import { SubmissionResult } from "@conform-to/react";
 
-export const updateSettingsAction = async (_prevState: SubmissionResult<string[]> | undefined, formData: FormData) => {
+export const updateSettingsAction = async (
+  _prevState: SubmissionResult<string[]> | undefined,
+  formData: FormData,
+) => {
   const submission = parseWithZod(formData, {
     schema: inputsSchema,
   });

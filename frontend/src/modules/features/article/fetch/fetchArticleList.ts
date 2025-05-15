@@ -2,7 +2,10 @@ import { calcOffsetLimitFromPageNumber } from "@/modules/common/functions/pagina
 import { createApiClient } from "@/utils/api/apiClient";
 import { ArticlePreview } from "@/utils/types/models";
 
-export const fetchArticlesByAuthor = async (authorUsername: string, pageNumber: number) => {
+export const fetchArticlesByAuthor = async (
+  authorUsername: string,
+  pageNumber: number,
+) => {
   const { offset, limit } = calcOffsetLimitFromPageNumber(pageNumber, 10);
 
   const client = createApiClient({
@@ -21,7 +24,9 @@ export const fetchArticlesByAuthor = async (authorUsername: string, pageNumber: 
 
   if (response.result === "success") {
     return {
-      articles: response.data.articles.map((article) => ArticlePreview.parse(article)),
+      articles: response.data.articles.map((article) =>
+        ArticlePreview.parse(article),
+      ),
       articlesCount: response.data.articlesCount,
     };
   }
@@ -48,7 +53,9 @@ export const fetchArticlesByTag = async (tag: string, page: number) => {
 
   if (response.result === "success") {
     return {
-      articles: response.data.articles.map((article) => ArticlePreview.parse(article)),
+      articles: response.data.articles.map((article) =>
+        ArticlePreview.parse(article),
+      ),
       articlesCount: response.data.articlesCount,
     };
   }
@@ -56,7 +63,10 @@ export const fetchArticlesByTag = async (tag: string, page: number) => {
   throw new Error("api error.");
 };
 
-export const fetchFavoriteArticles = async (username: string, pageNumber: number) => {
+export const fetchFavoriteArticles = async (
+  username: string,
+  pageNumber: number,
+) => {
   const { offset, limit } = calcOffsetLimitFromPageNumber(pageNumber, 10);
 
   const client = createApiClient({
@@ -75,7 +85,9 @@ export const fetchFavoriteArticles = async (username: string, pageNumber: number
 
   if (response.result === "success") {
     return {
-      articles: response.data.articles.map((article) => ArticlePreview.parse(article)),
+      articles: response.data.articles.map((article) =>
+        ArticlePreview.parse(article),
+      ),
       articlesCount: response.data.articlesCount,
     };
   }
@@ -101,7 +113,9 @@ export const fetchFeedArticles = async (page: number) => {
 
   if (response.result === "success") {
     return {
-      articles: response.data.articles.map((article) => ArticlePreview.parse(article)),
+      articles: response.data.articles.map((article) =>
+        ArticlePreview.parse(article),
+      ),
       articlesCount: response.data.articlesCount,
     };
   }
@@ -127,7 +141,9 @@ export const fetchGlobalArticles = async (page: number) => {
 
   if (response.result === "success") {
     return {
-      articles: response.data.articles.map((article) => ArticlePreview.parse(article)),
+      articles: response.data.articles.map((article) =>
+        ArticlePreview.parse(article),
+      ),
       articlesCount: response.data.articlesCount,
     };
   }

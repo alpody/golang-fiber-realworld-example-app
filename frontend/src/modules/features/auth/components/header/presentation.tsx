@@ -1,4 +1,5 @@
 import { User } from "@/utils/types/models";
+import Image from "next/image";
 import Link from "next/link";
 import { HeaderMenuItem } from "./headerMenuItem";
 
@@ -43,8 +44,13 @@ const AuthenticatedMenus = ({ authUser }: { authUser: User }) => {
         </HeaderMenuItem>
       </li>
       <li className="nav-item">
-        <HeaderMenuItem href={`/profile/${authUser.username}`} segment="profile">
-          {authUser.image && <img src={authUser.image} alt="" className="user-pic" />}
+        <HeaderMenuItem
+          href={`/profile/${authUser.username}`}
+          segment="profile"
+        >
+          {authUser.image && (
+            <Image src={authUser.image} alt="" className="user-pic" />
+          )}
           {authUser.username}
         </HeaderMenuItem>
       </li>
@@ -60,7 +66,11 @@ export const Header = ({ authUser }: { authUser?: User }) => {
           <Link className="navbar-brand" href="/">
             conduit
           </Link>
-          {authUser ? <AuthenticatedMenus authUser={authUser} /> : <UnauthenticatedMenus />}
+          {authUser ? (
+            <AuthenticatedMenus authUser={authUser} />
+          ) : (
+            <UnauthenticatedMenus />
+          )}
         </div>
       </nav>
     </header>

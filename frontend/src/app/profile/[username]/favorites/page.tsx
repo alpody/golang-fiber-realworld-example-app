@@ -23,14 +23,23 @@ const FavoritesPage = async (props: {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link active" href={`/profile/${pathParams.username}/favorites`}>
+            <Link
+              className="nav-link active"
+              href={`/profile/${pathParams.username}/favorites`}
+            >
               Favorited Articles
             </Link>
           </li>
         </ul>
       </div>
-      <Suspense key={JSON.stringify(searchParams)} fallback={<p>⌛Loading...</p>}>
-        <FavoriteArticleList currentPage={searchParams.page} username={pathParams.username} />
+      <Suspense
+        key={JSON.stringify(searchParams)}
+        fallback={<p>⌛Loading...</p>}
+      >
+        <FavoriteArticleList
+          currentPage={searchParams.page}
+          username={pathParams.username}
+        />
       </Suspense>
     </>
   );

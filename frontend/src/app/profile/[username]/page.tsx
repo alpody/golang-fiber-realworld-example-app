@@ -18,19 +18,31 @@ const ProfilePage = async (props: {
       <div className="articles-toggle">
         <ul className="nav nav-pills outline-active">
           <li className="nav-item">
-            <Link className="nav-link active" href={`/profile/${pathParams.username}`}>
+            <Link
+              className="nav-link active"
+              href={`/profile/${pathParams.username}`}
+            >
               My Articles
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" href={`/profile/${pathParams.username}/favorites`}>
+            <Link
+              className="nav-link"
+              href={`/profile/${pathParams.username}/favorites`}
+            >
               Favorited Articles
             </Link>
           </li>
         </ul>
       </div>
-      <Suspense key={JSON.stringify(searchParams)} fallback={<p>⌛Loading...</p>}>
-        <MyArticleList currentPage={searchParams.page} username={pathParams.username} />
+      <Suspense
+        key={JSON.stringify(searchParams)}
+        fallback={<p>⌛Loading...</p>}
+      >
+        <MyArticleList
+          currentPage={searchParams.page}
+          username={pathParams.username}
+        />
       </Suspense>
     </>
   );

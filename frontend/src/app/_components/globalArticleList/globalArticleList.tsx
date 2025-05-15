@@ -1,9 +1,18 @@
-import { Pagination, PaginationItem } from "@/modules/common/components/pagination";
+import {
+  Pagination,
+  PaginationItem,
+} from "@/modules/common/components/pagination";
 import { calcTotalPageNumber } from "@/modules/common/functions/pagination";
 import { ArticleCard } from "@/modules/features/article/components/articleCard";
 import { fetchGlobalArticles } from "@/modules/features/article/fetch/fetchArticleList";
 
-const Pages = ({ totalPages, currentPage }: { totalPages: number; currentPage: number }) => (
+const Pages = ({
+  totalPages,
+  currentPage,
+}: {
+  totalPages: number;
+  currentPage: number;
+}) => (
   <Pagination>
     {[...Array(totalPages)].map((_, index) => {
       const page = index + 1;
@@ -17,7 +26,11 @@ const Pages = ({ totalPages, currentPage }: { totalPages: number; currentPage: n
   </Pagination>
 );
 
-export const GlobalArticleList = async ({ currentPage }: { currentPage: number }) => {
+export const GlobalArticleList = async ({
+  currentPage,
+}: {
+  currentPage: number;
+}) => {
   const { articles, articlesCount } = await fetchGlobalArticles(currentPage);
   const totalPages = calcTotalPageNumber(articlesCount, 10);
 
@@ -28,7 +41,9 @@ export const GlobalArticleList = async ({ currentPage }: { currentPage: number }
       {articles.map((article, index) => (
         <ArticleCard key={index} article={article} />
       ))}
-      {1 < totalPages && <Pages currentPage={currentPage} totalPages={totalPages} />}
+      {1 < totalPages && (
+        <Pages currentPage={currentPage} totalPages={totalPages} />
+      )}
     </>
   );
 };

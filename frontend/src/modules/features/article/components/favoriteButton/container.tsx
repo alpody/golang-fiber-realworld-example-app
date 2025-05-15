@@ -12,7 +12,13 @@ type Props = {
   className?: string;
 };
 
-export const FavoriteButton = ({ slug, favorited, favoritesCount, showMessage, className }: Props) => {
+export const FavoriteButton = ({
+  slug,
+  favorited,
+  favoritesCount,
+  showMessage,
+  className,
+}: Props) => {
   const [state, action, isPending] = useActionState(favoriteAction, {
     favorited,
     favoritesCount,

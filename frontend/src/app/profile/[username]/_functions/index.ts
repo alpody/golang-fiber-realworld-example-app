@@ -1,6 +1,9 @@
 import { User } from "@/utils/types/models";
 
-export const showEditProfileSettingsButton = (profileUsername: string, currentUser: User | undefined) => {
+export const showEditProfileSettingsButton = (
+  profileUsername: string,
+  currentUser: User | undefined,
+) => {
   if (currentUser == null) {
     return false;
   }
@@ -8,6 +11,9 @@ export const showEditProfileSettingsButton = (profileUsername: string, currentUs
   return profileUsername === currentUser.username;
 };
 
-export const showFollowButton = (profileUsername: string, currentUser: User | undefined) => {
+export const showFollowButton = (
+  profileUsername: string,
+  currentUser: User | undefined,
+) => {
   return profileUsername !== currentUser?.username;
 };

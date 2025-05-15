@@ -1,9 +1,18 @@
-import { Pagination, PaginationItem } from "@/modules/common/components/pagination";
+import {
+  Pagination,
+  PaginationItem,
+} from "@/modules/common/components/pagination";
 import { calcTotalPageNumber } from "@/modules/common/functions/pagination";
 import { ArticleCard } from "@/modules/features/article/components/articleCard";
 import { fetchFavoriteArticles } from "@/modules/features/article/fetch/fetchArticleList";
 
-const Pages = ({ totalPages, currentPage }: { totalPages: number; currentPage: number }) => (
+const Pages = ({
+  totalPages,
+  currentPage,
+}: {
+  totalPages: number;
+  currentPage: number;
+}) => (
   <Pagination>
     {[...Array(totalPages)].map((_, index) => {
       const page = index + 1;
@@ -17,8 +26,17 @@ const Pages = ({ totalPages, currentPage }: { totalPages: number; currentPage: n
   </Pagination>
 );
 
-export const FavoriteArticleList = async ({ username, currentPage }: { currentPage: number; username: string }) => {
-  const { articles, articlesCount } = await fetchFavoriteArticles(username, currentPage);
+export const FavoriteArticleList = async ({
+  username,
+  currentPage,
+}: {
+  currentPage: number;
+  username: string;
+}) => {
+  const { articles, articlesCount } = await fetchFavoriteArticles(
+    username,
+    currentPage,
+  );
   const totalPages = calcTotalPageNumber(articlesCount, 10);
 
   return articles.length < 1 ? (
@@ -28,7 +46,9 @@ export const FavoriteArticleList = async ({ username, currentPage }: { currentPa
       {articles.map((article, index) => (
         <ArticleCard key={index} article={article} />
       ))}
-      {1 < totalPages && <Pages currentPage={currentPage} totalPages={totalPages} />}
+      {1 < totalPages && (
+        <Pages currentPage={currentPage} totalPages={totalPages} />
+      )}
     </>
   );
 };

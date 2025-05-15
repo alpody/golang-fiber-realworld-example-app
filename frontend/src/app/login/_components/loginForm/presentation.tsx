@@ -32,7 +32,12 @@ export const LoginForm = ({ result, action, isPending }: Props) => {
   return (
     <>
       <ErrorMessage messages={form.errors} />
-      <form id={form.id} onSubmit={form.onSubmit} action={action} noValidate={true}>
+      <form
+        id={form.id}
+        onSubmit={form.onSubmit}
+        action={action}
+        noValidate={true}
+      >
         <fieldset className="form-group">
           <input
             type="email"
@@ -55,7 +60,13 @@ export const LoginForm = ({ result, action, isPending }: Props) => {
           />
           <ErrorMessage messages={fields.password.errors} />
         </fieldset>
-        <Button component="button" size="lg" type="submit" className="pull-xs-right" disabled={isPending}>
+        <Button
+          component="button"
+          size="lg"
+          type="submit"
+          className="pull-xs-right"
+          disabled={isPending}
+        >
           Sign in
         </Button>
       </form>

@@ -32,7 +32,12 @@ export const RegistrationForm = ({ result, action, isPending }: Props) => {
   return (
     <>
       <ErrorMessage messages={form.errors} />
-      <form id={form.id} action={action} onSubmit={form.onSubmit} noValidate={true}>
+      <form
+        id={form.id}
+        action={action}
+        onSubmit={form.onSubmit}
+        noValidate={true}
+      >
         <fieldset className="form-group">
           <input
             type="text"
