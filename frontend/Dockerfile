@@ -10,26 +10,21 @@ COPY . .
 
 RUN npm run build
 
-RUN if [ -d "dist" ]; then \
-    mkdir -p /output && \
-    cp -r dist/* /output/; \
-    elif [ -d "build" ]; then \
-    mkdir -p /output && \
-    cp -r build/* /output/; \
-    else \
-    echo "No build output directory found" && \
-    exit 1; \
-    fi
+RUN ls -la && ls -la .next
 
-FROM nginx:alpine
+FROM node:20-alpine
 
-COPY --from=build /output /usr/share/nginx/html
+WORKDIR /app
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/package-lock.json ./package-lock.json
+COPY --from=build /app/public ./public
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/node_modules ./node_modules
 
-EXPOSE 80
+EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
+ENV NODE_ENV=production
+ENV PORT=3000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "start"]
