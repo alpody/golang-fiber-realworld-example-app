@@ -26,5 +26,6 @@ EXPOSE 3000
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV API_BASE_URL=http://localhost:8585/api
 
 CMD ["npm", "run", "start"]

@@ -1,119 +1,56 @@
 # ![RealWorld Example App](logo.png)
 
-> ### [Golang/Fiber](https://gofiber.io) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API. Project based on [RealWorld example](https://github.com/xesina/golang-echo-realworld-example-app/) for [Golang/Echo](https://echo.labstack.com/)
+> ### Fiber + SQLC codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
 
 ### [Demo](https://demo.realworld.io/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
 
-This codebase was created to demonstrate a fully fledged fullstack application built with Golang/Fiber including CRUD operations, authentication, routing, pagination, and more.
+This codebase was created to demonstrate a fully fledged fullstack application built with **Fiber + SQLC** including CRUD operations, authentication, routing, pagination, and more.
 
-We've gone to great lengths to adhere to the [Golang/Fiber](https://gofiber.io) community styleguides & best practices.
+We've gone to great lengths to adhere to the **Fiber + SQLC** community styleguides & best practices.
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 
-## Quick start
+# How it works
 
-Before quick start you must install [docker](https://www.docker.com), [docker-compose](https://docs.docker.com/compose/)  and [Git](https://git-scm.com/).
+The RealWorld Fiber SQLC application is a backend example app demonstrating best practices for CRUD operations, authentication, and more, adhering to the RealWorld specification.
 
-**Starts ready docker container**
+### Backend
+- **Language**: Go
+- **Framework**: Fiber
+- **Database**: PostgreSQL
+- **SQL Queries**: sqlc (generates type-safe code from SQL)
 
-```bash
-mkdir database && chmod o+w ./database && docker run -d -p 8585:8585 -v $(pwd)/database:/myapp/database alpody/golang-fiber-real-world 
-```
+### Structure
+- **cmd/realworld**: Entry point of the application.
+- **internal**: Core application logic, including handlers, middleware, and database interactions.
+- **pkg**: Reusable packages.
+- **usecase/dto**: Data transfer objects for use cases.
 
-**Builds and tests**
+### Deployment
+- **Docker**: Utilizes Docker and Docker Compose for containerization.
 
-```bash
-git clone https://github.com/alpody/golang-fiber-realworld-example-app.git
-cd golang-fiber-realworld-example-app 
-chmod a+x start.sh
-./start.sh
-```
-Press <code>Ctrl + c</code> for stop application.
+### Configuration
+- **sqlc.yaml**: Configuration for sqlc to generate Go code from SQL queries.
+- **docker-compose.yml**: Configuration for Docker Compose to set up the application's services.
 
-See asciinema this process:
+### Additional Features
+- **Routing**: Managed by Fiber.
+- **Authentication**: JWT-based authentication.
+- **Testing**: Simple unit test.
 
-[![asciicast](https://asciinema.org/a/eyZ5upSyv9IJyE36g4sj3ZBBw.svg)](https://asciinema.org/a/eyZ5upSyv9IJyE36g4sj3ZBBw)
+# Getting started
 
-## Getting started
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/dashhhik/realworld-fiber-sqlc.git
+   cd realworld-fiber-sqlc
 
-### Install Golang (go1.11+)
-
-Please check the official golang installation guide before you start. [Official Documentation](https://golang.org/doc/install)
-Also make sure you have installed a go1.11+ version.
-
-### Environment Config
-
-make sure your ~/.*shrc have those variable:
-
-```bash
-➜  echo $GOPATH
-/Users/xesina/go
-➜  echo $GOROOT
-/usr/local/go/
-➜  echo $PATH
-...:/usr/local/go/bin:/Users/alpody/test/bin:/usr/local/go/bin
-```
-
-For more info and detailed instructions please check this guide: [Setting GOPATH](https://github.com/golang/go/wiki/SettingGOPATH)
-
-### Clone the repository
-
-Clone this repository:
-
-```bash
-➜ git clone https://github.com/alpody/golang-fiber-realworld-example-app.git
-```
-
-Or simply use the following command which will handle cloning the repo:
-
-```bash
-➜ go get -u -v github.com/alpody/golang-fiber-realworld-example-app
-```
-
-Switch to the repo folder
-
-```bash
-➜ cd $GOPATH/src/github.com/alpody/golang-fiber-realworld-example-app
-```
-
-### Working with makefile
-
-If you had installed make utility, you can simply run and select command. 
-
-```bash
-make help
-```
-
-### Install dependencies
-
-```bash
-➜ go mod download
-```
-
-### Run
-
-```bash
-➜ go run main.go
-```
-
-### Build
-
-```bash
-➜ go build
-```
-
-### Tests
-
-```bash
-➜ go test ./...
-```
-### Swagger UI
-
-Open url http://localhost:8585/swagger/index.html in browser.
-
-![2021-10-07_17-01-27](https://user-images.githubusercontent.com/13846803/136400503-fedd869c-4508-4699-a79b-66e0bbd765e2.png)
+2. Build and run the services using Docker Compose:
+   ```sh
+   docker-compose up --build
+   ```
 
 

@@ -1,0 +1,19 @@
+version: "2"
+sql:
+  - engine: postgresql
+    schema: "migrations/schema.sql"
+    queries: "internal/usecase/repo/"
+    rules:
+      - sqlc/repo-prepare
+    gen:
+      go:
+        emit_interface: true
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        json_tags_case_style: "camel"
+        package: "sqlc"
+        out: "internal/usecase/repo/sqlc"
+        emit_prepared_queries: false
+        emit_exact_table_names: false
+        emit_empty_slices: true
+        emit_params_struct_pointers: true
