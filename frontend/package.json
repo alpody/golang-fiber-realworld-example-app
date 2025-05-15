@@ -13,18 +13,18 @@
     "openapi-generate": "openapi-typescript ./api/openapi.yml --output ./src/generated/apiSchema.generated.d.ts"
   },
   "dependencies": {
-    "@conform-to/react": "^1.2.2",
-    "@conform-to/zod": "^1.2.2",
+    "@conform-to/react": "^1.5.1",
+    "@conform-to/zod": "^1.5.1",
     "clsx": "^2.1.1",
     "ionicons": "^2.0.1",
-    "next": "^15.2.4",
+    "next": "^15.3.2",
     "react": "^18.3",
     "react-dom": "^18.3",
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.1",
+    "remark-rehype": "^11.1.2",
     "unified": "^11.0.5",
-    "zod": "^3.23.8"
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -33,11 +33,11 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.0",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.1.6",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "openapi-typescript": "^7.4.1",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.4"
+    "openapi-typescript": "^7.8.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
