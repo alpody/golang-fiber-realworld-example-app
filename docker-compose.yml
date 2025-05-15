@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  backend:
+    image: ${DOCKER_HUB_USERNAME}/sna25-backend:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - backend_data:/app/data
+    networks:
+      - app_network
+
+  frontend:
+    image: ${DOCKER_HUB_USERNAME}/sna25-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  backend_data:

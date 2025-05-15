@@ -4,23 +4,23 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'
+        description: "Environment to deploy to"
         required: true
-        default: 'production'
+        default: "production"
         type: choice
         options:
           - production
           - staging
           - development
       deploy_backend:
-        description: 'Deploy backend'
+        description: "Deploy backend"
         required: true
-        default: 'true'
+        default: "true"
         type: boolean
       deploy_frontend:
-        description: 'Deploy frontend'
+        description: "Deploy frontend"
         required: true
-        default: 'true'
+        default: "true"
         type: boolean
 
 jobs:
@@ -38,10 +38,28 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Verify SSH agent
+        run: |
+          ssh-add -l
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+
       - name: Configure SSH known hosts
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/known_hosts
+          echo "SSH configuration directory:"
+          ls -la ~/.ssh
+
+      - name: Copy docker-compose.yml to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          sed -i "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml
+          scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         env:
@@ -49,9 +67,17 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
+          # Debug SSH configuration
+          ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
+            ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest && \
-            docker-compose up -d backend"
+            if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then \
+              docker-compose up -d backend; \
+            else \
+              echo 'ERROR: No docker-compose file found!' && \
+              pwd && \
+              exit 1; \
+            fi"
 
   deploy-frontend:
     if: ${{ github.event.inputs.deploy_frontend == 'true' }}
@@ -71,6 +97,19 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/known_hosts
+          echo "SSH configuration directory:"
+          ls -la ~/.ssh
+          
+      - name: Copy docker-compose.yml to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          sed -i "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml
+          scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         env:
@@ -78,6 +117,14 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
+          # Debug SSH configuration
+          ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
+            ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest && \
-            docker-compose up -d frontend"
+            if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then \
+              docker-compose up -d frontend; \
+            else \
+              echo 'ERROR: No docker-compose file found!' && \
+              pwd && \
+              exit 1; \
+            fi"
