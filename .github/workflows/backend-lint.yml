@@ -1,0 +1,43 @@
+name: Go Backend Lint
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-lint.yml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-lint.yml"
+  workflow_dispatch:
+
+jobs:
+  golangci-lint:
+    name: Lint Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: backend/go.sum
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          working-directory: backend
+          args: --config=./.golangci.yml --timeout=5m
+          skip-cache: false
+          only-new-issues: false
