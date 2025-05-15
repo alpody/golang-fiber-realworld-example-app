@@ -123,8 +123,8 @@ jobs:
               -e "s|\${DB_USER}|${{ secrets.DB_USER }}|g" \
               -e "s|\${DB_PASSWORD}|${{ secrets.DB_PASSWORD }}|g" \
               -e "s|\${DB_NAME}|${{ secrets.DB_NAME }}|g" \
-              compose.yml > compose.modified.yml
-          cat compose.modified.yml
+              compose.yml > docker-compose.modified.yml
+          cat docker-compose.modified.yml
 
           # Reuse .env file created in the backend job if this job runs separately
           if [ ! -f .env ]; then
