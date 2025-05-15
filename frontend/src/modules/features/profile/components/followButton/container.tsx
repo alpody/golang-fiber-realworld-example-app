@@ -12,8 +12,15 @@ type Props = {
   className?: string;
 };
 
-export const FollowButton = ({ username, following, color, className }: Props) => {
-  const [state, action, isPending] = useActionState(followAction, { following });
+export const FollowButton = ({
+  username,
+  following,
+  color,
+  className,
+}: Props) => {
+  const [state, action, isPending] = useActionState(followAction, {
+    following,
+  });
 
   return (
     <FollowButtonPresentation

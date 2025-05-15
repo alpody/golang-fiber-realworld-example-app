@@ -7,7 +7,12 @@ export const TagList = ({ tags }: Props) => (
     <p>Popular Tags</p>
     <div className="tag-list">
       {tags.map((tag, index) => (
-        <Tag component="a" variant="filled" href={`/?tab=tag&tag=${tag}`} key={index}>
+        <Tag
+          component="a"
+          variant="filled"
+          href={`/?tab=tag&tag=${tag}`}
+          key={index}
+        >
           {tag}
         </Tag>
       ))}

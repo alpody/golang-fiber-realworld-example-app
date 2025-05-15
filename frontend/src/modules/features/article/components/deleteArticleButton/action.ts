@@ -4,7 +4,10 @@ import { createApiClient } from "@/utils/api/apiClient";
 import { getSession } from "@/utils/auth/session";
 import { redirect } from "next/navigation";
 
-export const deleteArticleAction = async (_prevState: undefined, slug: string) => {
+export const deleteArticleAction = async (
+  _prevState: undefined,
+  slug: string,
+) => {
   if ((await getSession()) == null) {
     redirect("/login");
   }

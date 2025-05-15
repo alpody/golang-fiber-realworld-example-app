@@ -6,7 +6,13 @@ type PaginationItemProps = ComponentPropsWithoutRef<"li"> & {
   active?: boolean;
 };
 
-export const PaginationItem = ({ href, active, className, children, ...rest }: PaginationItemProps) => (
+export const PaginationItem = ({
+  href,
+  active,
+  className,
+  children,
+  ...rest
+}: PaginationItemProps) => (
   <li className={clsx("page-item", className, active && "active")} {...rest}>
     <a className="page-link" href={href}>
       {children}

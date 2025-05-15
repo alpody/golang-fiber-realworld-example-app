@@ -35,7 +35,12 @@ export const SettingsForm = ({ user, action, isPending, result }: Props) => {
   return (
     <>
       <ErrorMessage messages={form.errors} />
-      <form id={form.id} action={action} onSubmit={form.onSubmit} noValidate={true}>
+      <form
+        id={form.id}
+        action={action}
+        onSubmit={form.onSubmit}
+        noValidate={true}
+      >
         <fieldset>
           <fieldset className="form-group">
             <input

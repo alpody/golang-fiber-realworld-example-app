@@ -6,13 +6,29 @@ import { ArticleEditor as ArticleEditorPresentation } from "./presentation";
 import { Article } from "@/utils/types/models";
 
 export const CreateArticleEditor = () => {
-  const [state, action, isPending] = useActionState(createArticleAction, undefined);
+  const [state, action, isPending] = useActionState(
+    createArticleAction,
+    undefined,
+  );
 
-  return <ArticleEditorPresentation result={state} action={action} isPending={isPending} />;
+  return (
+    <ArticleEditorPresentation
+      result={state}
+      action={action}
+      isPending={isPending}
+    />
+  );
 };
 
-export const UpdateArticleEditor = ({ defaultValues }: { defaultValues: Promise<Article> }) => {
-  const [state, action, isPending] = useActionState(updateArticleAction, undefined);
+export const UpdateArticleEditor = ({
+  defaultValues,
+}: {
+  defaultValues: Promise<Article>;
+}) => {
+  const [state, action, isPending] = useActionState(
+    updateArticleAction,
+    undefined,
+  );
 
   return (
     <ArticleEditorPresentation

@@ -1,5 +1,11 @@
 import { API_BASE_URL } from "@/config/constants";
-import { ApiPath, ApiResponse, HttpErrorCode, HttpMethodOfPath, RequestParams } from "./apiTypes";
+import {
+  ApiPath,
+  ApiResponse,
+  HttpErrorCode,
+  HttpMethodOfPath,
+  RequestParams,
+} from "./apiTypes";
 import { getSession } from "@/utils/auth/session";
 
 const buildPathString = ({
@@ -14,7 +20,8 @@ const buildPathString = ({
 }) => {
   // replace path param placeholders to actual values
   const path = Object.entries(params?.path ?? {}).reduce(
-    (prev, [key, value]) => prev.replace(new RegExp(`\\{${key}\\}`), String(value)),
+    (prev, [key, value]) =>
+      prev.replace(new RegExp(`\\{${key}\\}`), String(value)),
     pathTemplate,
   );
 
@@ -28,11 +35,16 @@ const buildPathString = ({
   return searchParam.length > 0 ? path + "?" + searchParam : path;
 };
 
-export const isExpectedErrorCode = (statusCode: number): statusCode is HttpErrorCode => {
+export const isExpectedErrorCode = (
+  statusCode: number,
+): statusCode is HttpErrorCode => {
   return HttpErrorCode.map(Number).includes(statusCode);
 };
 
-export const createApiClient = <P extends ApiPath, M extends HttpMethodOfPath<P>>({
+export const createApiClient = <
+  P extends ApiPath,
+  M extends HttpMethodOfPath<P>,
+>({
   path,
   method,
   params,

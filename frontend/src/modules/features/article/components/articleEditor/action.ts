@@ -6,7 +6,10 @@ import { parseWithZod } from "@conform-to/zod";
 import { redirect } from "next/navigation";
 import { inputsSchema } from "./types";
 
-export const createArticleAction = async (_prevState: unknown, formData: FormData) => {
+export const createArticleAction = async (
+  _prevState: unknown,
+  formData: FormData,
+) => {
   if ((await getSession()) == null) {
     redirect("/login");
   }
@@ -45,7 +48,10 @@ export const createArticleAction = async (_prevState: unknown, formData: FormDat
   }
 };
 
-export const updateArticleAction = async (_prevState: unknown, formData: FormData) => {
+export const updateArticleAction = async (
+  _prevState: unknown,
+  formData: FormData,
+) => {
   if ((await getSession()) == null) {
     redirect("/login");
   }

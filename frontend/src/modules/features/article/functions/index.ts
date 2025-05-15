@@ -4,7 +4,11 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
 export const convertMarkdownToHtml = async (markdown: string) => {
-  const processed = await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(markdown);
+  const processed = await unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process(markdown);
 
   return processed.toString();
 };

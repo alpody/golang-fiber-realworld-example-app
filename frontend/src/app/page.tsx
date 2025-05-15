@@ -16,13 +16,23 @@ const ArticleList = (searchParams: SearchParams) => {
     case "global":
       return <GlobalArticleList currentPage={searchParams.page} />;
     case "tag":
-      return <TagArticleList currentPage={searchParams.page} tag={searchParams.tag ?? ""} />;
+      return (
+        <TagArticleList
+          currentPage={searchParams.page}
+          tag={searchParams.tag ?? ""}
+        />
+      );
     default:
-      throw new ExhaustiveError(searchParams.tab, "all tab cases are not covered");
+      throw new ExhaustiveError(
+        searchParams.tab,
+        "all tab cases are not covered",
+      );
   }
 };
 
-const Page = async (props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
+const Page = async (props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
   const session = await getSession();
   const searchParams = SearchParams.parse(await props.searchParams);
 
@@ -42,20 +52,35 @@ const Page = async (props: { searchParams: Promise<{ [key: string]: string | str
               <ul className="nav nav-pills outline-active">
                 {session && (
                   <li className="nav-item">
-                    <Link className={clsx("nav-link", searchParams.tab === "yours" && "active")} href="/?tab=yours">
+                    <Link
+                      className={clsx(
+                        "nav-link",
+                        searchParams.tab === "yours" && "active",
+                      )}
+                      href="/?tab=yours"
+                    >
                       Your Feed
                     </Link>
                   </li>
                 )}
                 <li className="nav-item">
-                  <Link className={clsx("nav-link", searchParams.tab === "global" && "active")} href="/?tab=global">
+                  <Link
+                    className={clsx(
+                      "nav-link",
+                      searchParams.tab === "global" && "active",
+                    )}
+                    href="/?tab=global"
+                  >
                     Global Feed
                   </Link>
                 </li>
                 {searchParams.tag && (
                   <li className="nav-item">
                     <Link
-                      className={clsx("nav-link", searchParams.tab === "tag" && "active")}
+                      className={clsx(
+                        "nav-link",
+                        searchParams.tab === "tag" && "active",
+                      )}
                       href={`/?tab=tag&tag=${searchParams.tag}`}
                     >
                       #{searchParams.tag}
@@ -64,7 +89,10 @@ const Page = async (props: { searchParams: Promise<{ [key: string]: string | str
                 )}
               </ul>
             </div>
-            <Suspense key={JSON.stringify(searchParams)} fallback={<p>⌛Loading...</p>}>
+            <Suspense
+              key={JSON.stringify(searchParams)}
+              fallback={<p>⌛Loading...</p>}
+            >
               <ArticleList {...searchParams} />
             </Suspense>
           </div>

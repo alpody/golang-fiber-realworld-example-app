@@ -6,7 +6,17 @@ import { updateSettingsAction } from "./action";
 import { User } from "@/utils/types/models";
 
 export const SettingsForm = ({ user }: { user: Promise<User> }) => {
-  const [state, action, isPending] = useActionState(updateSettingsAction, undefined);
+  const [state, action, isPending] = useActionState(
+    updateSettingsAction,
+    undefined,
+  );
 
-  return <SettingsFormPresentation user={use(user)} result={state} action={action} isPending={isPending} />;
+  return (
+    <SettingsFormPresentation
+      user={use(user)}
+      result={state}
+      action={action}
+      isPending={isPending}
+    />
+  );
 };

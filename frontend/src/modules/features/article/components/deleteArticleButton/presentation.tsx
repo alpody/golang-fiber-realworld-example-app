@@ -10,10 +10,19 @@ type Props = {
   className?: string;
 };
 
-export const DeleteArticleButton = ({ action, isPending, className }: Props) => {
+export const DeleteArticleButton = ({
+  action,
+  isPending,
+  className,
+}: Props) => {
   return (
     <form action={action} className={clsx(className, styles["form"])}>
-      <Button component="button" color="danger" type="submit" disabled={isPending}>
+      <Button
+        component="button"
+        color="danger"
+        type="submit"
+        disabled={isPending}
+      >
         <i className="ion-trash-a"></i> Delete Article
       </Button>
     </form>

@@ -6,7 +6,10 @@ import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { Inputs } from "./types";
 
-export const deleteCommentAction = async (_prevState: undefined, inputs: Inputs): Promise<undefined> => {
+export const deleteCommentAction = async (
+  _prevState: undefined,
+  inputs: Inputs,
+): Promise<undefined> => {
   if ((await getSession()) == null) {
     redirect("/login");
   }

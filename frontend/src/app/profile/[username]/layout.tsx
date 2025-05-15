@@ -15,7 +15,9 @@ type Props = {
 
 const Layout = async ({ children, params }: Props) => {
   const profile = await fetchProfile((await params).username);
-  const currentUser = (await getSession()) ? await fetchCurrentUser() : undefined;
+  const currentUser = (await getSession())
+    ? await fetchCurrentUser()
+    : undefined;
 
   return (
     <div className="profile-page">
@@ -23,12 +25,21 @@ const Layout = async ({ children, params }: Props) => {
         <div className="container">
           <div className="row">
             <div className="col-xs-12 col-md-10 offset-md-1">
-              {profile.image && <img src={profile.image} className="user-img" alt="" />}
+              {profile.image && (
+                <img src={profile.image} className="user-img" alt="" />
+              )}
               <h4>{profile.username}</h4>
               {profile.bio && <p>{profile.bio}</p>}
-              {showFollowButton(profile.username, currentUser) && <FollowButton {...profile} color="secondary" />}
+              {showFollowButton(profile.username, currentUser) && (
+                <FollowButton {...profile} color="secondary" />
+              )}
               {showEditProfileSettingsButton(profile.username, currentUser) && (
-                <Button component="a" href="/settings" className="action-btn" color="secondary">
+                <Button
+                  component="a"
+                  href="/settings"
+                  className="action-btn"
+                  color="secondary"
+                >
                   <i className="ion-plus-round"></i> Edit Profile Settings
                 </Button>
               )}

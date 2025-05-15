@@ -11,7 +11,14 @@ type Props = {
   className?: string;
 };
 
-export const FollowButton = ({ username, color, following, action, isPending, className }: Props) => {
+export const FollowButton = ({
+  username,
+  color,
+  following,
+  action,
+  isPending,
+  className,
+}: Props) => {
   return (
     <form action={action} className={clsx(className, styles["form"])}>
       <Button
@@ -22,7 +29,8 @@ export const FollowButton = ({ username, color, following, action, isPending, cl
         variant={following ? "filled" : "outline"}
         disabled={isPending}
       >
-        <i className="ion-plus-round"></i> {following ? "Unfollow" : "Follow"} {username}
+        <i className="ion-plus-round"></i> {following ? "Unfollow" : "Follow"}{" "}
+        {username}
       </Button>
     </form>
   );

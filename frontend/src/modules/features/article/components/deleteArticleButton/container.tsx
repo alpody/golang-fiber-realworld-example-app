@@ -10,7 +10,10 @@ type Props = {
 };
 
 export const DeleteArticleButton = ({ slug, className }: Props) => {
-  const [_state, dispatch, isPending] = useActionState(deleteArticleAction, undefined);
+  const [_state, dispatch, isPending] = useActionState(
+    deleteArticleAction,
+    undefined,
+  );
 
   const action = () => {
     if (!confirm("Delete this article?")) {
@@ -19,5 +22,11 @@ export const DeleteArticleButton = ({ slug, className }: Props) => {
     dispatch(slug);
   };
 
-  return <DeleteArticleButtonPresentation action={action} isPending={isPending} className={className} />;
+  return (
+    <DeleteArticleButtonPresentation
+      action={action}
+      isPending={isPending}
+      className={className}
+    />
+  );
 };

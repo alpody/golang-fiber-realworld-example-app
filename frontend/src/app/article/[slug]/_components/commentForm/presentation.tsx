@@ -13,7 +13,13 @@ type Props = {
   isPending?: boolean;
 };
 
-export const CommentForm = ({ slug, authorImage, result, postCommentAction, isPending }: Props) => {
+export const CommentForm = ({
+  slug,
+  authorImage,
+  result,
+  postCommentAction,
+  isPending,
+}: Props) => {
   const [form, fields] = useForm({
     defaultValue: {
       slug,
@@ -37,8 +43,18 @@ export const CommentForm = ({ slug, authorImage, result, postCommentAction, isPe
 
   return (
     <>
-      <form id={form.id} action={postCommentAction} onSubmit={form.onSubmit} className="card comment-form">
-        <input type="hidden" key={fields.slug.key} name={fields.slug.name} defaultValue={fields.slug.initialValue} />
+      <form
+        id={form.id}
+        action={postCommentAction}
+        onSubmit={form.onSubmit}
+        className="card comment-form"
+      >
+        <input
+          type="hidden"
+          key={fields.slug.key}
+          name={fields.slug.name}
+          defaultValue={fields.slug.initialValue}
+        />
         <div className="card-block">
           <textarea
             key={fields.body.key}
@@ -51,7 +67,9 @@ export const CommentForm = ({ slug, authorImage, result, postCommentAction, isPe
           <ErrorMessage messages={errors} />
         </div>
         <div className="card-footer">
-          {authorImage && <img src={authorImage} alt="" className="comment-author-img" />}
+          {authorImage && (
+            <img src={authorImage} alt="" className="comment-author-img" />
+          )}
           <Button component="button" type="submit" disabled={isPending}>
             Post Comment
           </Button>

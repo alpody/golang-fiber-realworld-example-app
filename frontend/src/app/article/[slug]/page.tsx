@@ -10,14 +10,19 @@ type Params = Promise<{
 }>;
 
 const Page = async (props: { params: Params }) => {
-  const currentUserPromise = (await getSession()) ? fetchCurrentUser() : undefined;
+  const currentUserPromise = (await getSession())
+    ? fetchCurrentUser()
+    : undefined;
   const params = await props.params;
 
   return (
     <ArticleArea slug={params.slug}>
       <div className="row">
         <div className="col-xs-12 col-md-8 offset-md-2">
-          <CommentForm slug={params.slug} currentUserPromise={currentUserPromise} />
+          <CommentForm
+            slug={params.slug}
+            currentUserPromise={currentUserPromise}
+          />
           <Suspense fallback={<p>⌛Loading comments...</p>}>
             <CommentList slug={params.slug} />
           </Suspense>

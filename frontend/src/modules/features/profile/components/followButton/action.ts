@@ -5,7 +5,10 @@ import { getSession } from "@/utils/auth/session";
 import { redirect } from "next/navigation";
 import { State } from "./types";
 
-export const followAction = async (state: State, username: string): Promise<State> => {
+export const followAction = async (
+  state: State,
+  username: string,
+): Promise<State> => {
   if ((await getSession()) == null) {
     redirect("/login");
   }

@@ -9,18 +9,34 @@ type Props = {
   isPending?: boolean;
 };
 
-export const CommentCard = ({ comment, showDeleteCommentButton, deleteCommentAction }: Props) => {
+export const CommentCard = ({
+  comment,
+  showDeleteCommentButton,
+  deleteCommentAction,
+}: Props) => {
   return (
     <div className="card">
       <div className="card-block">
         <p className="card-text">{comment.body}</p>
       </div>
       <div className="card-footer">
-        <Link href={`/profile/${comment.author.username}`} className="comment-author">
-          {comment.author.image && <img src={comment.author.image} className="comment-author-img" alt="" />}
+        <Link
+          href={`/profile/${comment.author.username}`}
+          className="comment-author"
+        >
+          {comment.author.image && (
+            <img
+              src={comment.author.image}
+              className="comment-author-img"
+              alt=""
+            />
+          )}
         </Link>
         &nbsp;
-        <Link href={`/profile/${comment.author.username}`} className="comment-author">
+        <Link
+          href={`/profile/${comment.author.username}`}
+          className="comment-author"
+        >
           {comment.author.username}
         </Link>
         <span className="date-posted">{comment.createdAt.toDateString()}</span>

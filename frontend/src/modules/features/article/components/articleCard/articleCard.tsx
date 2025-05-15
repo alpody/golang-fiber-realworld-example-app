@@ -13,14 +13,20 @@ export const ArticleCard = ({ article }: Props) => {
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <Link href={`/profile/${author.username}`}>{author.image && <img src={author.image} alt="" />}</Link>
+        <Link href={`/profile/${author.username}`}>
+          {author.image && <img src={author.image} alt="" />}
+        </Link>
         <div className="info">
           <Link href={`/profile/${author.username}`} className="author">
             {author.username}
           </Link>
           <span className="date">{article.createdAt.toDateString()}</span>
         </div>
-        <FavoriteButton {...article} showMessage={false} className="pull-xs-right" />
+        <FavoriteButton
+          {...article}
+          showMessage={false}
+          className="pull-xs-right"
+        />
       </div>
       <Link href={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>

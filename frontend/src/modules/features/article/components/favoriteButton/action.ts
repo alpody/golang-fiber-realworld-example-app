@@ -6,7 +6,10 @@ import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { State } from "./types";
 
-export const favoriteAction = async (prevState: State, slug: string): Promise<State> => {
+export const favoriteAction = async (
+  prevState: State,
+  slug: string,
+): Promise<State> => {
   if ((await getSession()) == null) {
     redirect("/login");
   }

@@ -18,7 +18,13 @@ const sizeToClassNameMaps: Record<Size, string> = {
 ///////////////////
 // color
 
-export type Color = "primary" | "secondary" | "info" | "success" | "warning" | "danger";
+export type Color =
+  | "primary"
+  | "secondary"
+  | "info"
+  | "success"
+  | "warning"
+  | "danger";
 
 const DEFAULT_COLOR: Color = "primary";
 
@@ -31,7 +37,10 @@ const DEFAULT_VARIANT: Variant = "outline";
 
 //////////////////////
 
-const generateClassNameFromVariantAndColor = (variant: Variant, color: Color) => {
+const generateClassNameFromVariantAndColor = (
+  variant: Variant,
+  color: Color,
+) => {
   const variantMaps: Record<Variant, string> = {
     filled: "btn-",
     outline: "btn-outline-",
