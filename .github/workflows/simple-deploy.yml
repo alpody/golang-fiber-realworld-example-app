@@ -36,9 +36,20 @@ jobs:
 
       - name: Prepare docker-compose.yml
         run: |
-          sed "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml > docker-compose.modified.yml
+          sed -e "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" \
+              -e "s|\${DB_USER}|${{ secrets.DB_USER }}|g" \
+              -e "s|\${DB_PASSWORD}|${{ secrets.DB_PASSWORD }}|g" \
+              -e "s|\${DB_NAME}|${{ secrets.DB_NAME }}|g" \
+              docker-compose.yml > docker-compose.modified.yml
           echo "Modified docker-compose file content:"
           cat docker-compose.modified.yml
+
+      - name: Create .env file for database credentials
+        run: |
+          echo "DB_USER=${{ secrets.DB_USER || 'postgres' }}" > .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD || 'password' }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME || 'realworld' }}" >> .env
+          cat .env
 
       - name: Copy files to server
         env:
@@ -47,8 +58,9 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
           scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
+          scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
 
-      - name: Deploy backend
+      - name: Deploy database and backend
         if: ${{ github.event.inputs.deploy_backend == 'true' }}
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -58,6 +70,7 @@ jobs:
           ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
             ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest && \
+            docker-compose up -d postgres && \
             docker-compose up -d backend"
 
       - name: Deploy frontend
