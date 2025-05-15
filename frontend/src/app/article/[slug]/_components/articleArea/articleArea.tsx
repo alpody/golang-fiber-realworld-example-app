@@ -4,8 +4,11 @@ import { FavoriteButton } from "@/modules/features/article/components/favoriteBu
 import { Tag } from "@/modules/features/article/components/tag";
 import { fetchArticle } from "@/modules/features/article/fetch/fetchArticle";
 import { convertMarkdownToHtml } from "@/modules/features/article/functions";
+import { fetchCurrentUser } from "@/modules/features/auth/fetch/fetchCurrentUser";
 import { FollowButton } from "@/modules/features/profile/components/followButton";
+import { getSession } from "@/utils/auth/session";
 import { Article, User } from "@/utils/types/models";
+import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 import styles from "./articleArea.module.css";
@@ -14,8 +17,6 @@ import {
   showEditArticleButton,
   showFollowButton,
 } from "./functions";
-import { getSession } from "@/utils/auth/session";
-import { fetchCurrentUser } from "@/modules/features/auth/fetch/fetchCurrentUser";
 
 const Actions = ({
   article,
@@ -29,7 +30,7 @@ const Actions = ({
   return (
     <div className="article-meta">
       <Link href={`/profile/${profile.username}`}>
-        {profile.image && <img src={profile.image} alt="" />}
+        {profile.image && <Image src={profile.image} alt="" />}
       </Link>
       <div className="info">
         <Link href={`/profile/${profile.username}`} className="author">

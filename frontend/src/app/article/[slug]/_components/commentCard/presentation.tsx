@@ -1,4 +1,5 @@
 import { Comment } from "@/utils/types/models";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./presentation.module.css";
 
@@ -25,7 +26,7 @@ export const CommentCard = ({
           className="comment-author"
         >
           {comment.author.image && (
-            <img
+            <Image
               src={comment.author.image}
               className="comment-author-img"
               alt=""

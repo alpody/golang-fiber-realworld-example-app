@@ -2,6 +2,7 @@ import { Button } from "@/modules/common/components/button";
 import { ErrorMessage } from "@/modules/common/components/errorMessage";
 import { SubmissionResult, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import Image from "next/image";
 import { startTransition } from "react";
 import { inputsSchema } from "./types";
 
@@ -68,7 +69,7 @@ export const CommentForm = ({
         </div>
         <div className="card-footer">
           {authorImage && (
-            <img src={authorImage} alt="" className="comment-author-img" />
+            <Image src={authorImage} alt="" className="comment-author-img" />
           )}
           <Button component="button" type="submit" disabled={isPending}>
             Post Comment

@@ -1,4 +1,5 @@
 import { User } from "@/utils/types/models";
+import Image from "next/image";
 import Link from "next/link";
 import { HeaderMenuItem } from "./headerMenuItem";
 
@@ -48,7 +49,7 @@ const AuthenticatedMenus = ({ authUser }: { authUser: User }) => {
           segment="profile"
         >
           {authUser.image && (
-            <img src={authUser.image} alt="" className="user-pic" />
+            <Image src={authUser.image} alt="" className="user-pic" />
           )}
           {authUser.username}
         </HeaderMenuItem>

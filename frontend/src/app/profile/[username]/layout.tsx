@@ -3,6 +3,7 @@ import { fetchCurrentUser } from "@/modules/features/auth/fetch/fetchCurrentUser
 import { FollowButton } from "@/modules/features/profile/components/followButton";
 import { fetchProfile } from "@/modules/features/profile/fetch/fetchProfile";
 import { getSession } from "@/utils/auth/session";
+import Image from "next/image";
 import { ReactNode } from "react";
 import { showEditProfileSettingsButton, showFollowButton } from "./_functions";
 
@@ -26,7 +27,7 @@ const Layout = async ({ children, params }: Props) => {
           <div className="row">
             <div className="col-xs-12 col-md-10 offset-md-1">
               {profile.image && (
-                <img src={profile.image} className="user-img" alt="" />
+                <Image src={profile.image} className="user-img" alt="" />
               )}
               <h4>{profile.username}</h4>
               {profile.bio && <p>{profile.bio}</p>}

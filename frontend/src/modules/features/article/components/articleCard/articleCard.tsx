@@ -1,7 +1,8 @@
 import { ArticlePreview } from "@/utils/types/models";
+import Image from "next/image";
 import Link from "next/link";
-import { Tag } from "../tag";
 import { FavoriteButton } from "../favoriteButton";
+import { Tag } from "../tag";
 
 type Props = {
   article: ArticlePreview;
@@ -14,7 +15,7 @@ export const ArticleCard = ({ article }: Props) => {
     <div className="article-preview">
       <div className="article-meta">
         <Link href={`/profile/${author.username}`}>
-          {author.image && <img src={author.image} alt="" />}
+          {author.image && <Image src={author.image} alt="" />}
         </Link>
         <div className="info">
           <Link href={`/profile/${author.username}`} className="author">
