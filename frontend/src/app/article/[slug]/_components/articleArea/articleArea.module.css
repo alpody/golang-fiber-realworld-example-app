@@ -1,0 +1,9 @@
+.actions {
+  & * + * {
+    margin-left: 10px;
+  }
+}
+
+.action-btn + .action-btn {
+  margin-left: 5px;
+}

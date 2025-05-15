@@ -1,0 +1,6 @@
+# Ignore artifacts:
+build
+coverage
+
+# auto generated files
+src/generated
