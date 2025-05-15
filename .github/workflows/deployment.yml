@@ -50,7 +50,7 @@ jobs:
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/known_hosts
 
-      - name: Copy docker-compose.yml to server
+      - name: Copy compose.yml to server
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
@@ -60,15 +60,15 @@ jobs:
               -e "s|\${DB_USER}|${{ secrets.DB_USER }}|g" \
               -e "s|\${DB_PASSWORD}|${{ secrets.DB_PASSWORD }}|g" \
               -e "s|\${DB_NAME}|${{ secrets.DB_NAME }}|g" \
-              docker-compose.yml > docker-compose.modified.yml
+              compose.yml > docker-compose.modified.yml
           cat docker-compose.modified.yml
-          
+
           # Create .env file for database credentials
           echo "DB_USER=${{ secrets.DB_USER || 'postgres' }}" > .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD || 'password' }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME || 'realworld' }}" >> .env
-          
-          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
+
+          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/compose.yml
           scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
 
       - name: Deploy to ${{ github.event.inputs.environment }}
@@ -113,7 +113,7 @@ jobs:
           echo "SSH configuration directory:"
           ls -la ~/.ssh
 
-      - name: Copy docker-compose.yml to server
+      - name: Copy compose.yml to server
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
@@ -123,17 +123,17 @@ jobs:
               -e "s|\${DB_USER}|${{ secrets.DB_USER }}|g" \
               -e "s|\${DB_PASSWORD}|${{ secrets.DB_PASSWORD }}|g" \
               -e "s|\${DB_NAME}|${{ secrets.DB_NAME }}|g" \
-              docker-compose.yml > docker-compose.modified.yml
-          cat docker-compose.modified.yml
-          
+              compose.yml > compose.modified.yml
+          cat compose.modified.yml
+
           # Reuse .env file created in the backend job if this job runs separately
           if [ ! -f .env ]; then
             echo "DB_USER=${{ secrets.DB_USER || 'postgres' }}" > .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD || 'password' }}" >> .env
             echo "DB_NAME=${{ secrets.DB_NAME || 'realworld' }}" >> .env
           fi
-          
-          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
+
+          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/compose.yml
           scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
 
       - name: Deploy to ${{ github.event.inputs.environment }}
