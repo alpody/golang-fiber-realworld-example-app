@@ -103,6 +103,13 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       
+      - name: Debug - Check frontend directory structure
+        run: |
+          ls -la
+          if [ -d "dist" ]; then echo "dist directory exists"; else echo "No dist directory"; fi
+          if [ -d "build" ]; then echo "build directory exists"; else echo "No build directory"; fi
+        working-directory: ./frontend
+      
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
