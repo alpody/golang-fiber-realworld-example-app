@@ -1,26 +1,40 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
-  - package-ecosystem: "gomod" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "gomod"
+    directory: "/backend" 
     schedule:
       interval: "daily"
     labels:
     - "dependency golang"
+    - "backend"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+    labels:
+    - "dependency npm"
+    - "frontend"
+    
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/backend"
     schedule:
       interval: "daily"
-      # Disable all pull requests for Docker dependencies
     labels: 
-    -  "dependency docker"
+    - "dependency docker"
+    - "backend"
+
+  - package-ecosystem: "docker"
+    directory: "/frontend"
+    schedule:
+      interval: "daily"
+    labels: 
+    - "dependency docker"
+    - "frontend"
+    
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule: 
-      interval: daily
+      interval: "weekly"
     labels: 
-    -  "dependency gh-action"
+    - "dependency gh-action"

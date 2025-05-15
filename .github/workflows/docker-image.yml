@@ -1,5 +1,4 @@
-#See: https://docs.docker.com/ci-cd/github-actions/
-name: CI to Docker Hub
+name: CI/CD Pipeline
 
 on:
   push:
@@ -8,10 +7,16 @@ on:
     branches: [ master ]
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Docker image tag'
-        required: false
-        default: 'latest'
+      deploy_backend:
+        description: 'Deploy backend'
+        required: true
+        default: 'true'
+        type: boolean
+      deploy_frontend:
+        description: 'Deploy frontend'
+        required: true
+        default: 'true'
+        type: boolean
       environment:
         description: 'Environment to deploy to'
         required: false
@@ -23,25 +28,87 @@ on:
           - development
 
 jobs:
-  docker:
+  backend:
+    name: Build and Deploy Backend
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.deploy_backend == 'true' }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      -
-        name: Set up Docker Buildx
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: backend/go.sum
+      
+      - name: Install dependencies
+        run: go mod download
+      
+      - name: Test
+        run: go test ./... -v
+      
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: Login to DockerHub
+      
+      - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      -
-        name: Build and push
+      
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/golang-fiber-real-world:${{ github.event.inputs.tag || 'latest' }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest
+          cache-to: type=inline
+
+  frontend:
+    name: Build and Deploy Frontend
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.deploy_frontend == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest
+          cache-to: type=inline
