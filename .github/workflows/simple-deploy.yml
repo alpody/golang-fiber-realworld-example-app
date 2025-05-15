@@ -1,0 +1,73 @@
+name: Simplified Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_backend:
+        description: "Deploy backend"
+        required: true
+        default: "true"
+        type: boolean
+      deploy_frontend:
+        description: "Deploy frontend"
+        required: true
+        default: "true"
+        type: boolean
+
+jobs:
+  deploy:
+    name: Deploy Services
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Configure SSH known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Prepare docker-compose.yml
+        run: |
+          sed "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml > docker-compose.modified.yml
+          echo "Modified docker-compose file content:"
+          cat docker-compose.modified.yml
+
+      - name: Copy files to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
+
+      - name: Deploy backend
+        if: ${{ github.event.inputs.deploy_backend == 'true' }}
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
+            ls -la && \
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest && \
+            docker-compose up -d backend"
+
+      - name: Deploy frontend
+        if: ${{ github.event.inputs.deploy_frontend == 'true' }}
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
+            ls -la && \
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest && \
+            docker-compose up -d frontend"

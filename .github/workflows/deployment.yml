@@ -58,10 +58,9 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
-          # Create .env file with Docker Hub username
-          echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" > .env
-          scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
+          sed "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml > docker-compose.modified.yml
+          cat docker-compose.modified.yml
+          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         env:
@@ -69,12 +68,11 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          # Debug SSH configuration
           ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
             ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-backend:latest && \
             if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then \
-              export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} && \
+              echo "Running docker-compose for backend" && \
               docker-compose up -d backend; \
             else \
               echo 'ERROR: No docker-compose file found!' && \
@@ -104,17 +102,16 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           echo "SSH configuration directory:"
           ls -la ~/.ssh
-          
+
       - name: Copy docker-compose.yml to server
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
-          # Create .env file with Docker Hub username
-          echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" > .env
-          scp .env $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/.env
+          sed "s|\${DOCKER_HUB_USERNAME}|${{ secrets.DOCKER_HUB_USERNAME }}|g" docker-compose.yml > docker-compose.modified.yml
+          cat docker-compose.modified.yml
+          scp docker-compose.modified.yml $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/docker-compose.yml
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         env:
@@ -122,12 +119,11 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          # Debug SSH configuration
           ssh -v $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && \
             ls -la && \
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest && \
             if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then \
-              export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} && \
+              echo "Running docker-compose for frontend" && \
               docker-compose up -d frontend; \
             else \
               echo 'ERROR: No docker-compose file found!' && \
