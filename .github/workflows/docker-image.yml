@@ -86,37 +86,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-
-      - name: Check for pnpm-lock.yaml
-        run: |
-          echo "Checking for lock file existence..."
-          if [ -f "pnpm-lock.yaml" ]; then
-            echo "Lock file found, will use frozen-lockfile"
-            echo "HAS_LOCKFILE=true" >> $GITHUB_ENV
-          else
-            echo "No lock file found, will generate one"
-            echo "HAS_LOCKFILE=false" >> $GITHUB_ENV
-          fi
-
-      - name: Install dependencies
-        run: |
-          corepack enable pnpm
-          if [ "$HAS_LOCKFILE" = "true" ]; then
-            echo "Installing with frozen lockfile"
-            pnpm install --frozen-lockfile || pnpm install --no-frozen-lockfile
-          else
-            echo "Installing and generating lockfile"
-            pnpm install
-          fi
-
-      - name: Build
-        run: pnpm run build
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -125,18 +94,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Debug - Check frontend directory structure
-        run: |
-          echo "Directory listing:"
-          ls -la
-          echo "Checking for lock file:"
-          ls -la pnpm-lock.yaml || echo "No pnpm-lock.yaml file"
-          echo "Checking Next.js output:"
-          if [ -d ".next" ]; then echo ".next directory exists"; else echo "No .next directory"; fi
-          if [ -d ".next/standalone" ]; then echo ".next/standalone exists"; else echo "No .next/standalone directory"; fi
-          ls -la .next 2>/dev/null || echo "Cannot list .next contents"
-        working-directory: ./frontend
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -147,3 +104,5 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/sna25-frontend:latest
           cache-to: type=inline
+          build-args: |
+            NEXT_TELEMETRY_DISABLED=1
