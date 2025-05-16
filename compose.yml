@@ -42,7 +42,7 @@ services:
     image: ${DOCKER_HUB_USERNAME}/sna25-frontend:latest
     restart: unless-stopped
     ports:
-      - "80:3000"
+      - "80:5173"
     depends_on:
       - backend
     environment:
