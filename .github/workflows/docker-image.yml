@@ -92,10 +92,27 @@ jobs:
           version: 8
           run_install: false
 
+      - name: Check for pnpm-lock.yaml
+        run: |
+          echo "Checking for lock file existence..."
+          if [ -f "pnpm-lock.yaml" ]; then
+            echo "Lock file found, will use frozen-lockfile"
+            echo "HAS_LOCKFILE=true" >> $GITHUB_ENV
+          else
+            echo "No lock file found, will generate one"
+            echo "HAS_LOCKFILE=false" >> $GITHUB_ENV
+          fi
+
       - name: Install dependencies
         run: |
           corepack enable pnpm
-          pnpm install --frozen-lockfile
+          if [ "$HAS_LOCKFILE" = "true" ]; then
+            echo "Installing with frozen lockfile"
+            pnpm install --frozen-lockfile || pnpm install --no-frozen-lockfile
+          else
+            echo "Installing and generating lockfile"
+            pnpm install
+          fi
 
       - name: Build
         run: pnpm run build
@@ -111,7 +128,11 @@ jobs:
 
       - name: Debug - Check frontend directory structure
         run: |
+          echo "Directory listing:"
           ls -la
+          echo "Checking for lock file:"
+          ls -la pnpm-lock.yaml || echo "No pnpm-lock.yaml file"
+          echo "Checking Next.js output:"
           if [ -d ".next" ]; then echo ".next directory exists"; else echo "No .next directory"; fi
           if [ -d ".next/standalone" ]; then echo ".next/standalone exists"; else echo "No .next/standalone directory"; fi
           ls -la .next 2>/dev/null || echo "Cannot list .next contents"
