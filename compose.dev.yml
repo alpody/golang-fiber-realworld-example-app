@@ -1,0 +1,81 @@
+services:
+    postgres:
+        image: postgres:15-alpine
+        restart: unless-stopped
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./backend/migrations/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: realworld
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        networks:
+            - app_network
+
+    migrations:
+        build:
+            context: ./backend
+            dockerfile: migrations/Dockerfile
+        environment:
+            - DATABASE_URL=postgres://postgres:postgres@postgres:5432/realworld
+        volumes:
+            - ./backend/migrations:/app
+        depends_on:
+            postgres:
+                condition: service_healthy
+        networks:
+            - app_network
+
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        environment:
+            - DATABASE_URL=postgres://postgres:postgres@postgres:5432/realworld
+        depends_on:
+            postgres:
+                condition: service_healthy
+            migrations:
+                condition: service_completed_successfully
+        networks:
+            - app_network
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+            target: deps
+        restart: unless-stopped
+        ports:
+            - "80:5173"
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+            - /app/.next
+        environment:
+            - NODE_ENV=development
+            - PORT=5173
+            - API_BASE_URL=http://backend:3000/api
+        command: "pnpm dev"
+        depends_on:
+            - backend
+        networks:
+            - app_network
+
+networks:
+    app_network:
+        driver: bridge
+
+volumes:
+    backend_data:
+    postgres_data:
