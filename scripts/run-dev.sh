@@ -17,9 +17,6 @@ print_error() {
     echo -e "${RED}ERROR: $1${NC}"
 }
 
-print_warning() {
-    echo -e "${YELLOW}WARNING: $1${NC}"
-}
 
 if docker compose version &> /dev/null; then
     DOCKER_COMPOSE="docker compose"
@@ -53,35 +50,21 @@ run_development() {
         exit 1
     fi
 
-    # Stop any existing containers and remove volumes if requested
-    if [ "$1" == "--fresh" ] || [ "$1" == "-f" ]; then
-        print_warning "Removing all existing containers and volumes..."
-        $DOCKER_COMPOSE -f compose.dev.yml down -v
-    else
-        $DOCKER_COMPOSE -f compose.dev.yml down
-    fi
-
-    # Start the development environment
     print_header "Building and starting services"
     $DOCKER_COMPOSE -f compose.dev.yml up --build -d postgres
 
-    # Wait for PostgreSQL to be ready
     print_header "Waiting for PostgreSQL to be ready"
     until $DOCKER_COMPOSE -f compose.dev.yml exec postgres pg_isready -U postgres -d realworld; do
         echo "PostgreSQL is not ready yet... waiting"
         sleep 2
     done
 
-    # Start backend and frontend
     print_header "Starting backend and frontend services"
     $DOCKER_COMPOSE -f compose.dev.yml up --build
 }
 
-# Main execution
-print_header "SNA25 Development Environment"
+print_header "SNA25 Project Development Environment"
 
-# Setup environment files
 setup_env_files
 
-# Run development environment
 run_development "$@"
