@@ -162,6 +162,25 @@ func TestGetProfileCaseSuccess(t *testing.T) {
 	}
 }
 
+func TestGetProfileCaseSuccessUnauthenticated(t *testing.T) {
+	tearDown()
+	setup()
+	url := "/api/profiles/user1"
+	req := httptest.NewRequest(http.MethodGet, url, nil)
+	req.Header.Set("Content-type", "application/json")
+	h.Register(e)
+
+	resp, err := e.Test(req, -1)
+	assert.NoError(t, err)
+
+	if assert.Equal(t, http.StatusOK, resp.StatusCode) {
+		body, _ := ioutil.ReadAll(resp.Body)
+		m := responseMap(body, "profile")
+		assert.Equal(t, "user1", m["username"])
+		assert.Equal(t, false, m["following"])
+	}
+}
+
 func TestGetProfileCaseNotFound(t *testing.T) {
 	tearDown()
 	setup()
