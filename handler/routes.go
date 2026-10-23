@@ -21,11 +21,11 @@ func (h *Handler) Register(r *fiber.App) {
 	user.Get("", h.CurrentUser)
 	user.Put("", h.UpdateUser)
 
-	profiles := v1.Group("/profiles", jwtMiddleware)
+	profiles := v1.Group("/profiles")
 	profiles.Get("/:username", h.GetProfile)
 
-	profiles.Post("/:username/follow", h.Follow)
-	profiles.Delete("/:username/follow", h.Unfollow)
+	profiles.Post("/:username/follow", jwtMiddleware, h.Follow)
+	profiles.Delete("/:username/follow", jwtMiddleware, h.Unfollow)
 
 	articlesJWTMiddleware := jwtware.New(
 		jwtware.Config{
